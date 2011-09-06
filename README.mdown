@@ -1,0 +1,3 @@
+# Welcome to Unitary
+
+Unitary is a frontend (currently under development) for PHPUnit built using Adobe Flex/AIR.
