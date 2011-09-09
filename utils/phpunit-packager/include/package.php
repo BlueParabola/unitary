@@ -11,6 +11,7 @@
 
 namespace Unitary;
 use \Exception as Exception;
+use \Phar as Phar;
 
 
 class PackageDependency {
@@ -30,6 +31,7 @@ class PackageDependency {
 
 class Package {
 	protected $_channel;
+	protected $_fullName;
 	protected $_name;
 	protected $_latestVersion;
 	protected $_downloadURL;
@@ -37,8 +39,11 @@ class Package {
 	protected $_requiredDependencies = array();
 	protected $_optionalDependencies = array();
 	
+	protected $_downloaded;
+	
 	function __construct(Channel $channel, $channelName) {
 		$this->_channel = $channel;
+		$this->_fullName = $channelName;
 		$this->_name = strtolower($channelName);
 		
 		$this->_loadPackageInfo();
@@ -48,28 +53,15 @@ class Package {
 		Logger::log("Discovering package $this->_name.");
 		Logger::indent();
 		
-		$url = $this->_channel->getReSTEntryPoint() . "p/" . $this->_name . "/info.xml";
-		$packageInfo = simplexml_load_file($url);
-		
-		if (!$packageInfo) {
-			throw new Exception("Cannot load information for package $this->_name");
-		}
-		
-		$packageInfo->registerXPathNamespace("pear", "http://pear.php.net/dtd/rest.package");
-		$baseLocation = $packageInfo->xpath('//pear:r');
-		
-		$attributes = $baseLocation[0]->attributes("http://www.w3.org/1999/xlink");
-		$versionURL = (string) $attributes['href'];
-		
-		if (!$versionURL) {
-			throw new Exception("Unable to discover the version information file for package $this->_name");
-		}
-		
-		$versionURL = $this->_channel->getURL() . $versionURL;
+		$versionURL = $this->_channel->getReSTEntryPoint() . "r/" . $this->_name;
 		
 		Logger::log("Loading package information file at $versionURL.");
-		
-		$this->_latestVersion = trim(file_get_contents($versionURL . "/stable.txt"));
+
+		try {
+			$this->_latestVersion = trim(file_get_contents($versionURL . "/stable.txt"));
+		} catch (Exception $e) {
+			$this->_latestVersion = trim(file_get_contents($versionURL . "/latest.txt"));
+		}
 		
 		if (!$this->_latestVersion) {
 			throw new Exception("Unable to determine latest stable version of package $this->_name");
@@ -98,13 +90,17 @@ class Package {
 		Logger::log("Discovering package dependencies...");
 		Logger::indent();
 		
-		$dependencyDataFile = file_get_contents($this->_channel->getReSTEntryPoint() . "/r/" . $this->_name . "/deps." . $this->_latestVersion . ".txt");
-		$dependencyData = unserialize($dependencyDataFile);
+		$dependencyDataFileName = $this->_channel->getReSTEntryPoint() . "/r/" . $this->_name . "/deps." . $this->_latestVersion . ".txt";
 		
-		if (!$dependencyData || !$dependencyDataFile) {
+		Logger::log("Dependency file is at $dependencyDataFileName");
+
+		try{
+			$dependencyDataFile = file_get_contents($dependencyDataFileName);
+			$dependencyData = unserialize($dependencyDataFile);
+		} catch (Exception $e) {
 			throw new Exception("Unable to load dependency information for package $this->_name");
 		}
-
+		
 		if (isset($dependencyData["required"]["package"])) {
 			if (!isset($dependencyData["required"]["package"][0])) {
 				$dependencyData["required"]["package"] = array($dependencyData["required"]["package"]);
@@ -113,6 +109,7 @@ class Package {
 			foreach ($dependencyData["required"]["package"] as $dependency) {
 				$channel = Channel::getChannel("http://" . $dependency["channel"]);
 				$package = $channel->getPackage($dependency["name"]);
+				$this->_requiredDependencies[] = $package;
 				Logger::log("Found required dependency: $channel/$package");
 			}
 		}
@@ -123,9 +120,10 @@ class Package {
 			}
 			
 			foreach ($dependencyData["optional"]["package"] as $dependency) {
-				Logger::log("Found optional dependency: {$dependency["channel"]}/{$dependency["name"]}");
 				$channel = Channel::getChannel("http://" . $dependency["channel"]);
 				$package = $channel->getPackage($dependency["name"]);
+				$this->_optionalDependencies[] = $package;
+				Logger::log("Found required dependency: $channel/$package");
 			}
 		}
 		
@@ -134,7 +132,42 @@ class Package {
 	}
 	
 	function downloadTo($destinationDirectory) {
+		if ($this->_downloaded) {
+			return;
+		}
+
+		$this->_downloaded = true;
+		
+		Logger::log("Downloading package $this->_fullName...");
+		Logger::indent();
+		
 		$this->loadDependencies();
+		
+		$fileContents = file_get_contents($this->_downloadURL);
+		$fileLocation = tempnam(sys_get_temp_dir(), "unitary");
+		file_put_contents($fileLocation, $fileContents);
+		
+		$tar = new Tar($fileLocation);
+		
+		$tar->extract($destinationDirectory, "");
+		
+		unlink($fileLocation);
+		
+		Logger::outdent();
+		Logger::log("Downloaded.");
+		Logger::log("Resolving dependencies...");
+		Logger::indent();
+		
+		foreach ($this->_requiredDependencies as $dependency) {
+			$dependency->downloadTo($destinationDirectory);
+		}
+		
+		foreach ($this->_optionalDependencies as $dependency) {
+			$dependency->downloadTo($destinationDirectory);
+		}
+		
+		Logger::outdent();
+		Logger::log("Download sequence complete.");
 	}
 	
 	function __toString() {

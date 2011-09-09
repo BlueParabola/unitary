@@ -23,6 +23,6 @@ class Packager {
 		
 		$package->downloadTo($tempName);
 		
-		echo $tempName;
+		echo $tempName, "\n";
 	}
 }
