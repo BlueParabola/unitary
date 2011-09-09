@@ -18,7 +18,7 @@ class PackageDependency {
 	protected $_name;
 	
 	function __construct(Channel $channel, $name) {
-		$this->_channel = $channel;
+		$this->__construct = $channel;
 		$this->_name = $name;
 	}
 	
@@ -105,20 +105,36 @@ class Package {
 			throw new Exception("Unable to load dependency information for package $this->_name");
 		}
 
-		foreach ($dependencyData["required"]["package"] as $dependency) {
-			$channel = Channel::getChannel($dependency["channel"]);
-			$package = $channel->getPackage($dependency["name"]);
-			Logger::log("Found required dependency: $channel/$package");
+		if (isset($dependencyData["required"]["package"])) {
+			if (!isset($dependencyData["required"]["package"][0])) {
+				$dependencyData["required"]["package"] = array($dependencyData["required"]["package"]);
+			}
+			
+			foreach ($dependencyData["required"]["package"] as $dependency) {
+				$channel = Channel::getChannel("http://" . $dependency["channel"]);
+				$package = $channel->getPackage($dependency["name"]);
+				Logger::log("Found required dependency: $channel/$package");
+			}
 		}
 
-		foreach ($dependencyData["optional"]["packages"] as $dependency) {
-			$channel = Channel::getChannel($dependency["channel"]);
-			$package = $channel->getPackage($dependency["name"]);
-			Logger::log("Found optional dependency: $channel/$package");
+		if (isset($dependencyData["optional"]["package"]) && is_array($dependencyData["optional"]["package"])) {
+			if (!isset($dependencyData["optional"]["package"][0])) {
+				$dependencyData["optional"]["package"] = array($dependencyData["optional"]["package"]);
+			}
+			
+			foreach ($dependencyData["optional"]["package"] as $dependency) {
+				Logger::log("Found optional dependency: {$dependency["channel"]}/{$dependency["name"]}");
+				$channel = Channel::getChannel("http://" . $dependency["channel"]);
+				$package = $channel->getPackage($dependency["name"]);
+			}
 		}
 		
 		Logger::log("Package dependencies discovered.");
 		Logger::outdent();
+	}
+	
+	function downloadTo($destinationDirectory) {
+		$this->loadDependencies();
 	}
 	
 	function __toString() {
