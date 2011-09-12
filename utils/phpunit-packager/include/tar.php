@@ -41,16 +41,20 @@ class TarFile {
 		}
 		
 		$this->_inputFile = $inputFile;
-
-		Logger::log("$this->fileName ($this->fileSize byte" . ($this->fileSize != 1 ? 's' : '') . ")");
 	}
 	
-	function saveTo($destination, $ignoreRegex = null) {
+	protected function _getContents() {
 		$fileData = fread($this->_inputFile, $this->fileSize);
 		
 		if ($this->fileSize % 512) {
 			fread($this->_inputFile, 512 - ($this->fileSize % 512));
 		}
+		
+		return $fileData;
+	}
+	
+	function saveTo($destination, $ignoreRegex = null) {
+		$fileData = $this->_getContents();
 		
 		if ($ignoreRegex && preg_match($ignoreRegex, $this->fileName)) {
 			return;
@@ -66,6 +70,23 @@ class TarFile {
 		
 		file_put_contents($fileName, $fileData);
 	}
+	
+	static function tarFile($inputFile) {
+		$result = new TarFile($inputFile);
+		
+		if ($result->fileName == "././@LongLink") {
+			$longFileName = $result->_getContents();
+			
+			$result = new TarFile($inputFile);
+			$result->fileName = $longFileName;
+		}
+
+		if ($result->fileName) {
+			Logger::log("$result->fileName ($result->fileSize byte" . ($result->fileSize != 1 ? 's' : '') . ")");
+		}
+		
+		return $result;
+	}
 }
 
 
@@ -80,10 +101,10 @@ class Tar {
 		$inputFile = gzopen($this->_fileName, "r");
 		
 		do {
-			$f = new TarFile($inputFile);
+			$f = TarFile::tarFile($inputFile);
 			
 			if ($f->fileName) {
-				$f->saveTo($destination);
+				$f->saveTo($destination, $ignoreRegex);
 			}
 		} while ($f->fileName);
 		

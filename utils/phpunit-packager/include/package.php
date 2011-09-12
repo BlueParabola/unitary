@@ -149,7 +149,7 @@ class Package {
 		
 		$tar = new Tar($fileLocation);
 		
-		$tar->extract($destinationDirectory, "");
+		$tar->extract($destinationDirectory, '/package2?.(sig|xml)/');
 		
 		unlink($fileLocation);
 		
