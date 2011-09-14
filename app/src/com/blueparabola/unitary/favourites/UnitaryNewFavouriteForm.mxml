@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Form xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		skinClass="com.blueparabola.unitary.skins.UnitaryFormSkin"
+		width="100%" height="100%"
+		defaultButton="{saveButton}">
+	
+	<fx:Declarations>
+		
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.utils.StringUtil;
+			
+			protected var _favourite:FavouritesModel;
+			
+			public function get favourite():FavouritesModel {
+				return _favourite;
+			}
+			
+			public function set favourite(value:FavouritesModel):void {
+				_favourite = value;
+				
+				projectName.text = value.projectName;
+				projectLocation.text = value.projectLocation;
+				additionalCommandListParameters.text = value.additionalCommandLineParameters;
+			}
+			
+			protected function doCancel(event:MouseEvent):void {
+				dispatchEvent(new Event("close"));
+			}
+			
+			
+			protected function doSave(event:MouseEvent):void {
+				if (!projectName.text.length) {
+					Alert.show("The project name cannot be empty.", "Error");
+					return;
+				}
+				
+				if (!projectLocation.text.length) {
+					Alert.show("You must provide a location to the project script.");
+					return;
+				}
+				
+				favourite.projectName = projectName.text;
+				favourite.projectLocation = projectLocation.text;
+				favourite.additionalCommandLineParameters = additionalCommandListParameters.text;
+				
+				favourite.save();
+				
+				doCancel(event);
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Metadata>
+		[Event(name="close", type="flash.events.Event")]
+	</fx:Metadata>
+	
+	<s:FormItem label="Name:">
+		<s:TextInput id="projectName" 
+					 valueCommit="projectName.text = StringUtil.trim(projectName.text)" />
+	</s:FormItem>
+	<s:FormItem label="Test Script:">
+		<s:TextInput id="projectLocation" 
+					 valueCommit="projectLocation.text = StringUtil.trim(projectLocation.text)" />
+	</s:FormItem>
+	<s:FormItem label="Parameters:">
+		<s:TextInput id="additionalCommandListParameters" 
+					 valueCommit="additionalCommandListParameters.text = StringUtil.trim(additionalCommandListParameters.text)" />
+	</s:FormItem>
+
+	<s:HGroup width="100%" horizontalAlign="right" paddingTop="10">
+		<s:Button label="Cancel" click="doCancel(event)" />
+		<s:Button label="Save" click="doSave(event)" id="saveButton" />
+		<s:Spacer width="32" />
+	</s:HGroup>	
+</s:Form>

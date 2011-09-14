@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+ADOBE SYSTEMS INCORPORATED
+Copyright 2010 Adobe Systems Incorporated
+All Rights Reserved.
+
+NOTICE: Adobe permits you to use, modify, and distribute this file
+in accordance with the terms of the license agreement accompanying it.
+
+-->
+
+<!--- The default skin class for a Spark Form container.  
+
+This skin defines a contentGroup for the Form container with a 
+FormLayout as its layout object. The FormLayout is a VerticalLayout
+that has additional logic to align the columns of FormItems.
+
+@see spark.components.Form
+@see spark.layouts.FormLayout
+
+@langversion 3.0
+@playerversion Flash 10
+@playerversion AIR 1.5
+@productversion Flex 4.5
+-->
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" 
+        xmlns:s="library://ns.adobe.com/flex/spark" 
+        xmlns:fb="http://ns.adobe.com/flashbuilder/2009" 
+        alpha.disabled="0.5">
+    
+    <fx:Metadata>
+        <![CDATA[ 
+        /** 
+        * @copy spark.skins.spark.ApplicationSkin#hostComponent
+        */
+        [HostComponent("spark.components.Form")]
+        ]]>
+    </fx:Metadata> 
+    
+    <s:states>
+        <s:State name="normal" />
+        <s:State name="error" />
+        <s:State name="disabled" />
+    </s:states>
+    
+    <s:Group id="contentGroup" showErrorSkin="true" showErrorTip="true" 
+             horizontalCenter="0" verticalCenter="0">
+        <s:layout>
+            <s:FormLayout gap="1"/>
+        </s:layout>
+    </s:Group>
+    
+    
+</s:Skin>

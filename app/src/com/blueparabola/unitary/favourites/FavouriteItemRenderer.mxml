@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				autoDrawBackground="false">
+
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+		<s:State name="selected" />
+	</s:states>
+	
+	<s:Rect includeIn="hovered,selected" top="0" left="0" right="0" bottom="0">
+		<s:fill>
+			<s:LinearGradient rotation="90">
+				<s:GradientEntry color="0x3838EA" />
+				<s:GradientEntry color="0x2D2CEA" />
+			</s:LinearGradient>
+		</s:fill>
+	</s:Rect>
+	
+	<s:HGroup left="0" right="0" bottom="0" top="0" paddingLeft="5" paddingTop="5" paddingBottom="5" paddingRight="5" verticalAlign="middle">
+		<s:VGroup>
+			<s:Label fontSize="20" text="{data.projectName}" />
+			<s:Label fontSize="12" text="{data.projectLocation}" color="0xbbbbbb" />
+		</s:VGroup>
+		<s:Spacer width="100%" />
+		<s:Button label="Edit" />
+		<s:Button label="Delete" />
+	</s:HGroup>
+	
+</s:ItemRenderer>

@@ -4,7 +4,8 @@
 
 @font-face {
 	src: url("fonts/Hattori_Hanzo.otf");
-	font-family: "HattoriHanzo";
+	fontFamily: "HattoriHanzo";
+	fontWeight: normal;
 }
 
 /* General definitions */
@@ -18,10 +19,22 @@ s|Button s|Label {
 	color: #222222;
 }
 
+s|Form s|Label {
+	textAlign: right;
+}
+
+s|TextInput {
+	skinClass: ClassReference("com.blueparabola.unitary.skins.UnitaryTextInputSkin");
+}
+
+s|FormItem {
+	skinClass: ClassReference("com.blueparabola.unitary.skins.UnitaryFormItemSkin");
+}
 
 /* Application Panel */
 
 s|Panel #titleDisplay {
 	fontSize: 36px;
 }
+
 
