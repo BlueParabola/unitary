@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" 
+			 xmlns:fb="http://ns.adobe.com/flashbuilder/2009" blendMode="normal" mouseEnabled="false" 
+			 minWidth="131" minHeight="127" alpha.disabled="0.5" alpha.disabledWithControlBar="0.5">
+	
+	<fx:Metadata>
+		<![CDATA[ 
+		/** 
+		* @copy spark.skins.spark.ApplicationSkin#hostComponent
+		*/
+		[HostComponent("spark.components.Panel")]
+		]]>
+	</fx:Metadata> 
+	
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="disabled" />
+		<s:State name="normalWithControlBar" stateGroups="withControls" />
+		<s:State name="disabledWithControlBar" stateGroups="withControls" />
+	</s:states>
+	
+	<s:VGroup left="0" right="0" top="0" bottom="0" id="contents" gap="0" paddingLeft="5" paddingRight="5" paddingTop="5" paddingBottom="5">
+		<s:HGroup width="100%">
+			<s:Label id="titleDisplay" height="100%">
+			</s:Label>
+			<s:HGroup id="controlBarGroup" paddingTop="7" horizontalAlign="right" width="100%" height="100%">
+			</s:HGroup>
+		</s:HGroup>
+		
+		<s:Line width="100%">
+			<s:stroke>
+				<s:SolidColorStroke color="0xf0f0f0" />
+			</s:stroke>
+		</s:Line>
+		
+		<s:Group id="contentGroup" width="100%" height="100%" minWidth="0" minHeight="0">
+		</s:Group>
+	</s:VGroup>
+</s:SparkSkin>

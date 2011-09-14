@@ -3,6 +3,9 @@
 					   xmlns:s="library://ns.adobe.com/flex/spark" 
 					   xmlns:mx="library://ns.adobe.com/flex/mx"
 					   autoExit="false" addedToStage="addedToStage(event)">
+	
+	<fx:Style source="Unitary.css" />
+	
 	<fx:Script>
 		<![CDATA[
 			import com.blueparabola.unitary.windows.UnitaryProjectWindow;
@@ -18,6 +21,7 @@
 			
 		]]>
 	</fx:Script>
+	
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>

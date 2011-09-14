@@ -3,12 +3,18 @@
 								   xmlns:s="library://ns.adobe.com/flex/spark" 
 								   xmlns:mx="library://ns.adobe.com/flex/mx" 
 								   xmlns:windows="com.blueparabola.unitary.windows.*" 
-								   width="600" height="400">
+								   width="600" height="400"
+								   title="Unitary"
+								   xmlns:panels="com.blueparabola.unitary.panels.*" 
+								   xmlns:favourites="com.blueparabola.unitary.favourites.*">
+	
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	
 	<s:SkinnableContainer left="0" top="0" right="0" bottom="0" skinClass="com.blueparabola.unitary.skins.UnitaryProjectWindowBackgroundSkin">
+		
+		<favourites:UnitaryFavouritesPanel width="100%" height="100%" />
 		
 	</s:SkinnableContainer>
 </windows:UnitaryProjectWindowClass>
