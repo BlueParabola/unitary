@@ -24,9 +24,14 @@ class Bootstrap {
 	static function validateEnvironment() {
 		// Check PHP version
 
-		$phpVersion = explode(".", phpversion());
+        /*
+         *  NOTE: This substring is necessary because quite often the PHP
+         *    version isn't a straight x.y.z but 5.3.3-1ubuntu9.5 instead. This
+         *    guards against that by making sure we always get M.m.p
+         */
+		$phpVersion = substr(PHP_VERSION, 0, 5);
 
-		if ($phpVersion[0] < 5 || ($phpVersion[0] >= 5 && $phpVersion[0] < 3)) {
+		if (version_compare($phpVersion, '5.3.0', '<')) {
 			die("This script requires PHP 5.3 or higher\n");
 		}
 
