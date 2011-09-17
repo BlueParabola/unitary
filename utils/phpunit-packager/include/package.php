@@ -130,31 +130,42 @@ class Package {
 		Logger::log("Package dependencies discovered.");
 		Logger::outdent();
 	}
-	
+
+    protected function _downloaded($destinationDirectory, $downloadURL) {
+        $directory = substr($downloadURL, strrpos($downloadURL, "/") + 1);
+        $directory = substr($directory, 0, strrpos($directory, "."));
+
+        return is_dir($destinationDirectory."/".$directory);
+    }
+
 	function downloadTo($destinationDirectory) {
 		if ($this->_downloaded) {
 			return;
 		}
 
 		$this->_downloaded = true;
-		
-		Logger::log("Downloading package $this->_fullName...");
-		Logger::indent();
-		
-		$this->loadDependencies();
-		
-		$fileContents = file_get_contents($this->_downloadURL);
-		$fileLocation = tempnam(sys_get_temp_dir(), "unitary");
-		file_put_contents($fileLocation, $fileContents);
-		
-		$tar = new Tar($fileLocation);
-		
-		$tar->extract($destinationDirectory, '/package2?.(sig|xml)/');
-		
-		unlink($fileLocation);
-		
-		Logger::outdent();
-		Logger::log("Downloaded.");
+
+        Logger::indent();
+        if ($this->_downloaded($destinationDirectory, $this->_downloadURL)) {
+            Logger::log("Using previously downloaded package $this->_fullName...");
+        } else {
+            Logger::log("Downloading package $this->_fullName...");
+
+            $this->loadDependencies();
+
+            $fileContents = file_get_contents($this->_downloadURL);
+            $fileLocation = tempnam(sys_get_temp_dir(), "unitary");
+            file_put_contents($fileLocation, $fileContents);
+
+            $tar = new Tar($fileLocation);
+            $tar->extract($destinationDirectory, '/package2?.(sig|xml)/');
+
+            unlink($fileLocation);
+
+            Logger::log("Downloaded.");
+        }
+        Logger::outdent();
+
 		Logger::log("Resolving dependencies...");
 		Logger::indent();
 		
