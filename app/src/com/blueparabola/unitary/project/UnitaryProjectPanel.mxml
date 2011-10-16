@@ -5,39 +5,85 @@
 								  xmlns:project="com.blueparabola.unitary.project.*"
 								  skinClass="com.blueparabola.unitary.skins.UnitaryPanelSkin" 
 								  width="100%" height="100%"
-								  title="{favouritesModel.projectName}" xmlns:favourites="com.blueparabola.unitary.favourites.*">
+								  title="{favouritesModel.projectName}" xmlns:favourites="com.blueparabola.unitary.favourites.*"
+								  creationComplete="handleCreationComplete(event)">
+	<fx:Script>
+		<![CDATA[
+			import com.blueparabola.unitary.favourites.FavouriteRunErrorEvent;
+			
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			
+			protected function handleFavouritesRunError(event:FavouriteRunErrorEvent):void {
+				currentState = "Base";
+				Alert.show("PHPUnit detected the following error(s) while running:\n" + event.errorString, "PHP Error", Alert.OK, this);
+			}
+			
+			protected function handleFavouritesRunComplete(event:Event):void {
+				currentState = "Base";
+			}
+			
+			protected function handleCreationComplete(event:FlexEvent):void {
+				favouritesModel.addEventListener("favouritesRunComplete", handleFavouritesRunComplete);
+				favouritesModel.addEventListener(FavouriteRunErrorEvent.favouriteRunErrorEvent, handleFavouritesRunError);
+			}
+			
+			protected function runTests():void {
+				currentState = "Running";
+				favouritesModel.runNewTest();
+			}
+		]]>
+	</fx:Script>
 	
 	<fx:Declarations>
-		<favourites:FavouritesModel id="favouritesModel" />
+		<favourites:FavouritesModel	id="favouritesModel" />
 	</fx:Declarations>
 	
+	<project:states>
+		<s:State name="Base" />
+		<s:State name="Running" />
+	</project:states>
+	
 	<project:controlBarContent>
-		<s:Button label="Run Tests" />
+		<s:Button label="Run Tests" click="runTests()" />
 	</project:controlBarContent>
 	
 	<s:HGroup left="0" right="0" top="0" bottom="0">
 		
-		<s:DataGrid height="100%" requestedRowCount="4" textAlign="center">
+		<s:filters>
+			<mx:BlurFilter blurX="10" blurY="10" includeIn="Running" />
+		</s:filters>
+		
+		<s:DataGrid minWidth="200" height="100%" requestedRowCount="4" textAlign="center" skinClass="com.blueparabola.unitary.skins.UnitaryDataGridSkin" >
 			<s:columns>
 				<s:ArrayList>
-					<s:GridColumn width="200" dataField="dataField1" headerText="Date"></s:GridColumn>
-					<s:GridColumn dataField="dataField2" headerText="Failures"></s:GridColumn>
-					<s:GridColumn dataField="dataField3" headerText="Warnings"></s:GridColumn>
+					<s:GridColumn dataField="runDate" headerText="Date" width="130"></s:GridColumn>
+					<s:GridColumn dataField="testsSucceeded" headerText="OK" width="50"></s:GridColumn>
+					<s:GridColumn dataField="testsFailed" headerText="Fail" width="50"></s:GridColumn>
+					<s:GridColumn dataField="testsWarned" headerText="Warn" width="50"></s:GridColumn>
 				</s:ArrayList>
 			</s:columns>
 			<s:typicalItem>
-				<fx:Object dataField1="Sample Data" dataField2="Sample Data" dataField3="Sample Data"></fx:Object>
+				<fx:Object runDate="2011/10/11 12:33:45" dataField2="12" dataField3="0" dataField4="12"></fx:Object>
 			</s:typicalItem>
 			<s:ArrayList>
-				<fx:Object dataField1="data1" dataField2="data1" dataField3="data1"></fx:Object>
-				<fx:Object dataField1="data2" dataField2="data2" dataField3="data2"></fx:Object>
-				<fx:Object dataField1="data3" dataField2="data3" dataField3="data3"></fx:Object>
-				<fx:Object dataField1="data4" dataField2="data4" dataField3="data4"></fx:Object>
 			</s:ArrayList>
 		</s:DataGrid>
 		
 		<s:TextArea width="100%" height="100%"/>
 		
 	</s:HGroup>
+
+	<s:VGroup left="0" right="0" top="0" bottom="0" includeIn="Running" verticalAlign="middle" horizontalAlign="center">
+		<s:Rect width="250" height="100" radiusX="10" radiusY="10">
+			<s:fill>
+				<s:SolidColor color="0x000000" alpha="0.5" />
+			</s:fill>
+		</s:Rect>
+	</s:VGroup>
+	
+	<s:VGroup left="0" right="0" top="0" bottom="0" includeIn="Running" verticalAlign="middle" horizontalAlign="center">
+		<mx:ProgressBar indeterminate="true" label="Running Tests…" />
+	</s:VGroup>
 	
 </project:UnitaryProjectPanelClass>

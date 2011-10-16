@@ -12,6 +12,6 @@ class addTest extends PHPUnit_Framework_TestCase {
 	}
 	
 	public function testAddition() {
-		$this->assertTrue(add(1, 2) == 3);
+		$this->assssertTrue(add(1, 2) == 3);
 	}
 }

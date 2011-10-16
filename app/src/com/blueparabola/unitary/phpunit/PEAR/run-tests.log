@@ -1,0 +1,6 @@
+TOTAL TIME: 00:13
+50 PASSED TESTS
+56 SKIPPED TESTS
+2 FAILED TESTS:
+/media/Elements_/backup/home/clockwerx/pear-svn/packages/XML_RPC2/trunk/tests/XML_RPC2/regressions/11314.phpt
+/media/Elements_/backup/home/clockwerx/pear-svn/packages/XML_RPC2/trunk/tests/XML_RPC2/regressions/18258.phpt

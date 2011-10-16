@@ -31,6 +31,10 @@ s|FormItem {
 	skinClass: ClassReference("com.blueparabola.unitary.skins.UnitaryFormItemSkin");
 }
 
+s|DataGrid {
+	color: #222222;
+}
+
 /* Application Panel */
 
 s|Panel #titleDisplay {
