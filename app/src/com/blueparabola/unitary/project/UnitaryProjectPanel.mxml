@@ -3,18 +3,18 @@
 								  xmlns:s="library://ns.adobe.com/flex/spark"
 								  xmlns:mx="library://ns.adobe.com/flex/mx"
 								  xmlns:project="com.blueparabola.unitary.project.*"
-								  width="100%" height="100%" layout="absolute"
-								  title="Project">
+								  skinClass="com.blueparabola.unitary.skins.UnitaryPanelSkin" 
+								  width="100%" height="100%"
+								  title="{favouritesModel.projectName}" xmlns:favourites="com.blueparabola.unitary.favourites.*">
 	
 	<fx:Declarations>
-		<fx:String id="projectName" />
-		<fx:String id="project
+		<favourites:FavouritesModel id="favouritesModel" />
 	</fx:Declarations>
 	
-	<favourites:controlBarContent>
-		<s:Button label="Run Tests" click="runTests()" />
-	</favourites:controlBarContent>
-
+	<project:controlBarContent>
+		<s:Button label="Run Tests" />
+	</project:controlBarContent>
+	
 	<s:HGroup left="0" right="0" top="0" bottom="0">
 		
 		<s:DataGrid height="100%" requestedRowCount="4" textAlign="center">

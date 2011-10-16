@@ -6,15 +6,30 @@
 								   width="600" height="400"
 								   title="Unitary"
 								   xmlns:panels="com.blueparabola.unitary.panels.*" 
-								   xmlns:favourites="com.blueparabola.unitary.favourites.*">
+								   xmlns:favourites="com.blueparabola.unitary.favourites.*" xmlns:project="com.blueparabola.unitary.project.*">
+	<fx:Script>
+		<![CDATA[
+			import com.blueparabola.unitary.favourites.ProjectSelectedEvent;
+			
+			protected function didSelectFavourites(event:ProjectSelectedEvent):void {
+				currentState = "project";
+				projectPanel.favouritesModel = event.favouritesModel;
+			}
+			
+		]]>
+	</fx:Script>
 	
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	
+	<windows:states>
+		<s:State name="favourites" />
+		<s:State name="project" />
+	</windows:states>
+	
 	<s:SkinnableContainer left="0" top="0" right="0" bottom="0" skinClass="com.blueparabola.unitary.skins.UnitaryProjectWindowBackgroundSkin">
-		
-		<favourites:UnitaryFavouritesPanel width="100%" height="100%" />
-		
+		<favourites:UnitaryFavouritesPanel width="100%" height="100%" includeIn="favourites" FavouritesSelected="didSelectFavourites(event)" />
+		<project:UnitaryProjectPanel id="projectPanel" width="100%" height="100%" includeIn="project" />
 	</s:SkinnableContainer>
 </windows:UnitaryProjectWindowClass>

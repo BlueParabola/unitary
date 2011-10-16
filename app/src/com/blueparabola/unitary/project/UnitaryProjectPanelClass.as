@@ -1,6 +1,6 @@
 package com.blueparabola.unitary.project
 {
-	import mx.containers.Panel;
+	import spark.components.Panel;
 	
 	public class UnitaryProjectPanelClass extends Panel
 	{

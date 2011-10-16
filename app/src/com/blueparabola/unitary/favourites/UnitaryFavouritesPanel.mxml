@@ -11,6 +11,10 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	
+	<fx:Metadata>
+		[Event(name="FavouritesSelected", type="com.blueparabola.unitary.favourites.ProjectSelectedEvent")]
+	</fx:Metadata>
+	
 	<favourites:states>
 		<s:State name="Base" />
 		<s:State name="NewFavourite" />
@@ -45,6 +49,10 @@
 				);
 			}
 			
+			protected function doubleClickedList(event:MouseEvent):void {
+				dispatchEvent(new ProjectSelectedEvent(favouritesList.selectedItem));
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -52,9 +60,12 @@
 		<s:Button label="New Project" click="newFavourite()" enabled="false" enabled.Base="true" />
 	</favourites:controlBarContent>
 	
-	<s:List width="100%" height="100%"  skinClass="com.blueparabola.unitary.skins.UnitaryListSkin"
+	<s:List id="favouritesList"
+			skinClass="com.blueparabola.unitary.skins.UnitaryListSkin"
 			dataProvider="{com.blueparabola.unitary.favourites.FavouritesModel.GlobalFavourites}" 
-			alpha="0.0" alpha.Base="1.0" itemRenderer="com.blueparabola.unitary.favourites.FavouriteItemRenderer">
+			width="100%" height="100%" alpha="0.0" alpha.Base="1.0" 
+			itemRenderer="com.blueparabola.unitary.favourites.FavouriteItemRenderer"
+			doubleClickEnabled="true" doubleClick="doubleClickedList(event)">
 	</s:List>
 	
 	<favourites:UnitaryNewFavouriteForm id="favouriteForm" width="100%" height="100%"
