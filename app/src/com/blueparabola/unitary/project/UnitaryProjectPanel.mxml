@@ -21,7 +21,7 @@
 			<s:columns>
 				<s:ArrayList>
 					<s:GridColumn width="200" dataField="dataField1" headerText="Date"></s:GridColumn>
-					<s:GridColumn dataField="dataField2" headerText="Falures"></s:GridColumn>
+					<s:GridColumn dataField="dataField2" headerText="Failures"></s:GridColumn>
 					<s:GridColumn dataField="dataField3" headerText="Warnings"></s:GridColumn>
 				</s:ArrayList>
 			</s:columns>

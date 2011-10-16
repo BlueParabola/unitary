@@ -3,7 +3,22 @@
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx" 
 				autoDrawBackground="false">
-
+	
+	<fx:Script>
+		<![CDATA[
+			protected function editButtonClicked(event:MouseEvent):void {
+				//TODO use a proper event-driven architecture for this. Yuck!
+				parentDocument.parent.parent.parent.parent.parent.editFavourite(data);
+			}
+			
+			protected function deleteButtonClicked(event:MouseEvent):void {
+				//TODO use a proper event-driven architecture for this. Yuck!
+				parentDocument.parent.parent.parent.parent.parent.deleteFavourite(data);
+			}
+		]]>
+	</fx:Script>
+	
+	
 	<s:states>
 		<s:State name="normal" />
 		<s:State name="hovered" />
@@ -13,8 +28,8 @@
 	<s:Rect includeIn="hovered,selected" top="0" left="0" right="0" bottom="0">
 		<s:fill>
 			<s:LinearGradient rotation="90">
-				<s:GradientEntry color="0x3838EA" />
-				<s:GradientEntry color="0x2D2CEA" />
+				<s:GradientEntry color="0x196989" />
+				<s:GradientEntry color="0x2A9CC8" />
 			</s:LinearGradient>
 		</s:fill>
 	</s:Rect>
@@ -25,8 +40,8 @@
 			<s:Label fontSize="12" text="{data.projectLocation}" color="0xbbbbbb" />
 		</s:VGroup>
 		<s:Spacer width="100%" />
-		<s:Button label="Edit" />
-		<s:Button label="Delete" />
+		<s:Button id="editButton" click="editButtonClicked(event)" label="Edit" />
+		<s:Button id="deleteButton" click="deleteButtonClicked(event)" label="Delete" />
 	</s:HGroup>
 	
 </s:ItemRenderer>

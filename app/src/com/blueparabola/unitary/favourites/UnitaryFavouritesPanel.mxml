@@ -19,10 +19,30 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
 			
 			protected function newFavourite():void {
-				favouriteForm.favourite = new FavouritesModel;				
+				favouriteForm.favourite = new FavouritesModel;		
 				currentState = "NewFavourite";	
+			}
+			
+			public function editFavourite(favouritesModel:FavouritesModel):void {
+				favouriteForm.favourite = favouritesModel;
+				currentState = "NewFavourite";
+			}
+			
+			public function deleteFavourite(favouritesModel:FavouritesModel):void {
+				Alert.show("This operation cannot be undone. Are you sure you want to proceed?", 
+					"Delete Project", 
+					Alert.YES | Alert.NO, 
+					this, 
+					function(e:CloseEvent):void {
+						if (e.detail == 1) {
+							favouritesModel.remove();
+						}
+					}
+				);
 			}
 			
 		]]>

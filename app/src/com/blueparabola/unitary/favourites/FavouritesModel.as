@@ -49,5 +49,14 @@ package com.blueparabola.unitary.favourites
 			var so:SharedObject = SharedObject.getLocal("com.blueparabola.unitary.favourites");
 			so.data["favourites"] = FavouritesModel.GlobalFavourites.source;
 		}
+		
+		public function remove():void {
+			if (FavouritesModel._GlobalFavourites.contains(this)) {
+				FavouritesModel._GlobalFavourites.removeItemAt(FavouritesModel._GlobalFavourites.getItemIndex(this));
+				
+				var so:SharedObject = SharedObject.getLocal("com.blueparabola.unitary.favourites");
+				so.data["favourites"] = FavouritesModel.GlobalFavourites.source;
+			}
+		}
 	}
 }
