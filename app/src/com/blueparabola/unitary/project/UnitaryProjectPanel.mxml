@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project:UnitaryProjectPanelClass xmlns:fx="http://ns.adobe.com/mxml/2009"
+								  xmlns:s="library://ns.adobe.com/flex/spark"
+								  xmlns:mx="library://ns.adobe.com/flex/mx"
+								  xmlns:project="com.blueparabola.unitary.project.*"
+								  width="100%" height="100%" layout="absolute"
+								  title="Project">
+	
+	<fx:Declarations>
+		<fx:String id="projectName" />
+		<fx:String id="project
+	</fx:Declarations>
+	
+	<favourites:controlBarContent>
+		<s:Button label="Run Tests" click="runTests()" />
+	</favourites:controlBarContent>
+
+	<s:HGroup left="0" right="0" top="0" bottom="0">
+		
+		<s:DataGrid height="100%" requestedRowCount="4" textAlign="center">
+			<s:columns>
+				<s:ArrayList>
+					<s:GridColumn width="200" dataField="dataField1" headerText="Date"></s:GridColumn>
+					<s:GridColumn dataField="dataField2" headerText="Falures"></s:GridColumn>
+					<s:GridColumn dataField="dataField3" headerText="Warnings"></s:GridColumn>
+				</s:ArrayList>
+			</s:columns>
+			<s:typicalItem>
+				<fx:Object dataField1="Sample Data" dataField2="Sample Data" dataField3="Sample Data"></fx:Object>
+			</s:typicalItem>
+			<s:ArrayList>
+				<fx:Object dataField1="data1" dataField2="data1" dataField3="data1"></fx:Object>
+				<fx:Object dataField1="data2" dataField2="data2" dataField3="data2"></fx:Object>
+				<fx:Object dataField1="data3" dataField2="data3" dataField3="data3"></fx:Object>
+				<fx:Object dataField1="data4" dataField2="data4" dataField3="data4"></fx:Object>
+			</s:ArrayList>
+		</s:DataGrid>
+		
+		<s:TextArea width="100%" height="100%"/>
+		
+	</s:HGroup>
+	
+</project:UnitaryProjectPanelClass>
