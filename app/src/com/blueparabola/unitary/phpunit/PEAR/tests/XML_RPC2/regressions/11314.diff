@@ -1,0 +1,51 @@
+001- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+001+ Fatal error: Uncaught exception 'XML_RPC2_Exception' with message 'XML_RPC2_Backend_Php does not support any encoding other than utf-8, due to a simplexml limitation' in /media/Elements_/backup/home/clockwerx/pear-svn/packages/XML_RPC2/trunk/XML/RPC2/Backend/Php/Server.php:82
+002- <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+002+ Stack trace:
+003-   <head>
+003+ #0 /media/Elements_/backup/home/clockwerx/pear-svn/packages/XML_RPC2/trunk/XML/RPC2/Server.php(236): XML_RPC2_Backend_Php_Server->__construct(Object(XML_RPC2_Server_Callhandler_Class), Array)
+004-     <meta http-equiv="Content-Type" content="text/HTML; charset=ISO-8859-1"  />
+004+ #1 /media/Elements_/backup/home/clockwerx/pear-svn/packages/XML_RPC2/trunk/tests/XML_RPC2/regressions/11314.php(54): XML_RPC2_Server::create('DocumentationSe...', Array)
+005-     <title>Available XMLRPC methods for this server</title>
+005+ #2 {main}
+006-     <style type="text/css">
+006+   thrown in /media/Elements_/backup/home/clockwerx/pear-svn/packages/XML_RPC2/trunk/XML/RPC2/Backend/Php/Server.php on line 82
+007-       li,p { font-size: 10pt; font-family: Arial,Helvetia,sans-serif; }
+008-       a:link { background-color: white; color: blue; text-decoration: underline; font-weight: bold; }
+009-       a:visited { background-color: white; color: blue; text-decoration: underline; font-weight: bold; }
+010-       table { border-collapse:collapse; width: 100% }
+011-       table,td { padding: 5px; border: 1px solid black; }
+012-       div.bloc { border: 1px dashed gray; padding: 10px; margin-bottom: 20px; }
+013-       div.description { border: 1px solid black; padding: 10px; }
+014-       span.type { background-color: white; color: gray; font-weight: normal; }
+015-       span.paratype { background-color: white; color: gray; font-weight: normal; }
+016-       span.name { background-color: white; color: #660000; }
+017-       span.paraname { background-color: white; color: #336600; }
+018-       img { border: 0px; }
+019-       li { font-size: 12pt; }
+020-     </style>
+021-   </head>
+022-   <body>
+023-     <h1>Available XMLRPC methods for this server</h1>
+024-     <h2><a name="index">Index</a></h2>
+025-     <ul>
+026-       <li><a href="#2d6b7f96be69b46a6523f48b4a288864">test.getSomething()</a></li>
+027-     </ul>
+028-     <h2>Details</h2>
+029-     <div class="bloc">
+030-       <h3><a name="2d6b7f96be69b46a6523f48b4a288864"><span class="type">(string)</span> <span class="name">test.getSomething</span><span class="other">(</span><span class="paratype">(array) </span><span class="paraname">something</span>, <span class="paratype">(string) </span><span class="paraname">another_thing</span>, <span class="paratype">(boolean) </span><span class="paraname">credentials</span><span class="other">)</span></a></h3>
+031-       <p><b>Description :</b></p>
+032-       <div class="description">
+033-         returns something
+034-       </div>
+035-       <p><b>Parameters : </b></p>
+036-       <table>
+037-         <tr><td><b>Type</b></td><td><b>Name</b></td><td><b>Documentation</b></td></tr>
+038-         <tr><td>array</td><td>something</td><td>A description</td></tr>
+039-         <tr><td>string</td><td>another_thing</td><td>A description of another thing</td></tr>
+040-         <tr><td>boolean</td><td>credentials</td><td>Whether to return nothing - server doesn't care though</td></tr>
+041-       </table>
+042-       <p>(return to <a href="#index">index</a>)</p>
+043-     </div>
+044-   </body>
+045- </html>

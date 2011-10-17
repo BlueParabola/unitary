@@ -1,0 +1,6 @@
+Fatal error: Uncaught exception 'XML_RPC2_Exception' with message 'XML_RPC2_Backend_Php does not support any encoding other than utf-8, due to a simplexml limitation' in /media/Elements_/backup/home/clockwerx/pear-svn/packages/XML_RPC2/trunk/XML/RPC2/Backend/Php/Server.php:82
+Stack trace:
+#0 /media/Elements_/backup/home/clockwerx/pear-svn/packages/XML_RPC2/trunk/XML/RPC2/Server.php(236): XML_RPC2_Backend_Php_Server->__construct(Object(XML_RPC2_Server_Callhandler_Class), Array)
+#1 /media/Elements_/backup/home/clockwerx/pear-svn/packages/XML_RPC2/trunk/tests/XML_RPC2/regressions/11314.php(54): XML_RPC2_Server::create('DocumentationSe...', Array)
+#2 {main}
+  thrown in /media/Elements_/backup/home/clockwerx/pear-svn/packages/XML_RPC2/trunk/XML/RPC2/Backend/Php/Server.php on line 82

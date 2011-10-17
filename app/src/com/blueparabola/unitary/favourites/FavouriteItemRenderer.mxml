@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				autoDrawBackground="false">
+	
+	<fx:Script>
+		<![CDATA[
+			protected function editButtonClicked(event:MouseEvent):void {
+				//TODO use a proper event-driven architecture for this. Yuck!
+				parentDocument.parent.parent.parent.parent.parent.editFavourite(data);
+			}
+			
+			protected function deleteButtonClicked(event:MouseEvent):void {
+				//TODO use a proper event-driven architecture for this. Yuck!
+				parentDocument.parent.parent.parent.parent.parent.deleteFavourite(data);
+			}
+		]]>
+	</fx:Script>
+	
+	
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+		<s:State name="selected" />
+	</s:states>
+	
+	<s:Rect includeIn="hovered,selected" top="0" left="0" right="0" bottom="0">
+		<s:fill>
+			<s:LinearGradient rotation="90">
+				<s:GradientEntry color="0x196989" />
+				<s:GradientEntry color="0x2A9CC8" />
+			</s:LinearGradient>
+		</s:fill>
+	</s:Rect>
+	
+	<s:HGroup left="0" right="0" bottom="0" top="0" paddingLeft="5" paddingTop="5" paddingBottom="5" paddingRight="5" verticalAlign="middle">
+		<s:VGroup>
+			<s:Label fontSize="20" text="{data.projectName}" />
+			<s:Label fontSize="12" text="{data.projectLocation}" color="0xbbbbbb" />
+		</s:VGroup>
+		<s:Spacer width="100%" />
+		<s:Button id="editButton" click="editButtonClicked(event)" label="Edit" />
+		<s:Button id="deleteButton" click="deleteButtonClicked(event)" label="Delete" />
+	</s:HGroup>
+	
+</s:ItemRenderer>

@@ -1,0 +1,44 @@
+/* CSS file */
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/mx";
+
+@font-face {
+	src: url("fonts/Hattori_Hanzo.otf");
+	fontFamily: "HattoriHanzo";
+	fontWeight: normal;
+}
+
+/* General definitions */
+
+* {
+	/* font-family: HattoriHanzo; */
+	color: #f0f0f0;
+}
+
+s|Button s|Label {
+	color: #222222;
+}
+
+s|Form s|Label {
+	textAlign: right;
+}
+
+s|TextInput {
+	skinClass: ClassReference("com.blueparabola.unitary.skins.UnitaryTextInputSkin");
+}
+
+s|FormItem {
+	skinClass: ClassReference("com.blueparabola.unitary.skins.UnitaryFormItemSkin");
+}
+
+s|DataGrid {
+	color: #222222;
+}
+
+/* Application Panel */
+
+s|Panel #titleDisplay {
+	fontSize: 36px;
+}
+
+
