@@ -10,6 +10,7 @@
 	<fx:Script>
 		<![CDATA[
 			import com.blueparabola.unitary.favourites.FavouriteRunErrorEvent;
+			import com.blueparabola.unitary.favourites.FavouritesTestRun;
 			
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
@@ -54,23 +55,129 @@
 			<mx:BlurFilter blurX="10" blurY="10" includeIn="Running" />
 		</s:filters>
 		
-		<s:DataGrid minWidth="200" height="100%" requestedRowCount="4" textAlign="center" skinClass="com.blueparabola.unitary.skins.UnitaryDataGridSkin" >
+		<s:DataGrid id="runHistory"
+			minWidth="200" height="100%" 
+			requestedRowCount="4" 
+			textAlign="center" 
+			skinClass="com.blueparabola.unitary.skins.UnitaryDataGridSkin"
+			dataProvider="{favouritesModel.runHistory}">
 			<s:columns>
 				<s:ArrayList>
-					<s:GridColumn dataField="runDate" headerText="Date" width="130"></s:GridColumn>
-					<s:GridColumn dataField="testsSucceeded" headerText="OK" width="50"></s:GridColumn>
-					<s:GridColumn dataField="testsFailed" headerText="Fail" width="50"></s:GridColumn>
-					<s:GridColumn dataField="testsWarned" headerText="Warn" width="50"></s:GridColumn>
+					<s:GridColumn dataField="runDate" headerText="Date" width="130">
+						<s:itemRenderer>
+							<fx:Component>
+								<s:GridItemRenderer>
+									<s:HGroup verticalAlign="middle" width="100%" height="26">
+										<s:Label textAlign="center" text="{data.runDate.toLocaleDateString()}" width="100%" color="{data.testsFailed > 0 ? 0xff4444 : 0x999999}" />
+									</s:HGroup>
+								</s:GridItemRenderer>
+							</fx:Component>
+						</s:itemRenderer>
+					</s:GridColumn>
+					<s:GridColumn dataField="testsSucceeded" headerText="OK" width="50">
+						<s:itemRenderer>
+							<fx:Component>
+								<s:GridItemRenderer>
+									<s:HGroup verticalAlign="middle" width="100%" height="24">
+										<s:Label textAlign="center" text="{data.testsSucceeded}" width="100%" color="{data.testsFailed > 0 ? 0xff4444 : 0x999999}" />
+									</s:HGroup>
+								</s:GridItemRenderer>
+							</fx:Component>
+						</s:itemRenderer>
+					</s:GridColumn>
+					<s:GridColumn dataField="testsFailed" headerText="Fail" width="50">
+						<s:itemRenderer>
+							<fx:Component>
+								<s:GridItemRenderer>
+									<s:HGroup verticalAlign="middle" width="100%" height="24">
+										<s:Label textAlign="center" text="{data.testsFailed}" width="100%" color="{data.testsFailed > 0 ? 0xff4444 : 0x999999}" />
+									</s:HGroup>
+								</s:GridItemRenderer>
+							</fx:Component>
+						</s:itemRenderer>
+					</s:GridColumn>
 				</s:ArrayList>
 			</s:columns>
 			<s:typicalItem>
-				<fx:Object runDate="2011/10/11 12:33:45" dataField2="12" dataField3="0" dataField4="12"></fx:Object>
+				<fx:Object runDate="{new Date('2011/10/11 12:33:45')}" dataField2="12" dataField3="0" dataField4="12"></fx:Object>
 			</s:typicalItem>
-			<s:ArrayList>
-			</s:ArrayList>
 		</s:DataGrid>
 		
-		<s:TextArea width="100%" height="100%"/>
+		<s:VGroup width="100%" height="100%">
+			<s:HGroup height="254" width="100%">
+				<mx:PieChart width="50%" height="100%" dataProvider="{FavouritesTestRun(runHistory.selectedItem).chartData}">
+					<mx:series>
+						<mx:PieSeries labelPosition="callout" labelField="label" field="value" />
+					</mx:series>
+				</mx:PieChart>
+			</s:HGroup>
+			<s:DataGrid 
+				width="100%" height="100%"
+				textAlign="center" 
+				skinClass="com.blueparabola.unitary.skins.UnitaryDataGridSkin"
+				dataProvider="{FavouritesTestRun(runHistory.selectedItem).executionResults}"
+				rowHeight="26">
+				<s:columns>
+					<s:ArrayList>
+						<s:GridColumn dataField="eventType" headerText="Event">
+							<s:itemRenderer>
+								<fx:Component>
+									<s:GridItemRenderer>
+										<s:HGroup verticalAlign="middle" width="100%" height="100%">
+											<s:Label text="{data.eventType}" width="100%" color="{data.status == 'pass' ? 0x44ff44 : (data.status == 'fail' ? 0xff4444 : 0x999999)}" />
+										</s:HGroup>
+									</s:GridItemRenderer>
+								</fx:Component>
+							</s:itemRenderer>
+						</s:GridColumn>
+						<s:GridColumn dataField="testSuite" headerText="Suite">
+							<s:itemRenderer>
+								<fx:Component>
+									<s:GridItemRenderer>
+										<s:HGroup verticalAlign="middle" width="100%" height="100%">
+											<s:Label text="{data.testSuite}" width="100%" color="{data.status == 'pass' ? 0x44ff44 : (data.status == 'fail' ? 0xff4444 : 0x999999)}" />
+										</s:HGroup>
+									</s:GridItemRenderer>
+								</fx:Component>
+							</s:itemRenderer>
+						</s:GridColumn>
+						<s:GridColumn dataField="testName" headerText="Test">
+							<s:itemRenderer>
+								<fx:Component>
+									<s:GridItemRenderer>
+										<s:HGroup verticalAlign="middle" width="100%" height="100%">
+											<s:Label text="{data.testName}" width="100%" color="{data.status == 'pass' ? 0x44ff44 : (data.status == 'fail' ? 0xff4444 : 0x999999)}" />
+										</s:HGroup>
+									</s:GridItemRenderer>
+								</fx:Component>
+							</s:itemRenderer>
+						</s:GridColumn>
+						<s:GridColumn dataField="status" headerText="Status">
+							<s:itemRenderer>
+								<fx:Component>
+									<s:GridItemRenderer>
+										<s:HGroup verticalAlign="middle" width="100%" height="100%">
+											<s:Label text="{data.status}" width="100%" color="{data.status == 'pass' ? 0x44ff44 : (data.status == 'fail' ? 0xff4444 : 0x999999)}" />
+										</s:HGroup>
+									</s:GridItemRenderer>
+								</fx:Component>
+							</s:itemRenderer>
+						</s:GridColumn>
+						<s:GridColumn dataField="message" headerText="Message">
+							<s:itemRenderer>
+								<fx:Component>
+									<s:GridItemRenderer>
+										<s:HGroup verticalAlign="middle" width="100%" height="100%">
+											<s:Label text="{data.message}" width="100%" color="{data.status == 'pass' ? 0x44ff44 : (data.status == 'fail' ? 0xff4444 : 0x999999)}" />
+										</s:HGroup>
+									</s:GridItemRenderer>
+								</fx:Component>
+							</s:itemRenderer>
+						</s:GridColumn>
+					</s:ArrayList>
+				</s:columns>
+			</s:DataGrid>
+		</s:VGroup>
 		
 	</s:HGroup>
 

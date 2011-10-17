@@ -1,5 +1,7 @@
 package com.blueparabola.unitary.favourites
 {
+	import com.blueparabola.unitary.phpunit.library.PHPUnitResult;
+	
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.net.SharedObject;
@@ -20,6 +22,7 @@ package com.blueparabola.unitary.favourites
 				registerClassAlias("FavouritesModelAlias", com.blueparabola.unitary.favourites.FavouritesModel);
 				registerClassAlias("ArrayCollection", mx.collections.ArrayCollection);
 				registerClassAlias("FavouritesTestRun", com.blueparabola.unitary.favourites.FavouritesTestRun);
+				registerClassAlias("PHPUnitResult", com.blueparabola.unitary.phpunit.library.PHPUnitResult);
 				
 				var so:SharedObject = SharedObject.getLocal("com.blueparabola.unitary.favourites");
 				var favourites:Array = so.data["favourites"];
@@ -87,6 +90,8 @@ package com.blueparabola.unitary.favourites
 			var self:FavouritesModel = this;
 			
 			testRun.addEventListener("favouritesRunComplete", function(e:Event):void {
+				runHistory.addItem(testRun);
+				save();
 				dispatchEvent(e);
 			});
 			

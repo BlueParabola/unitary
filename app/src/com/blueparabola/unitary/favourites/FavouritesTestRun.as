@@ -1,5 +1,7 @@
 package com.blueparabola.unitary.favourites
 {
+	import com.blueparabola.unitary.phpunit.library.PHPUnitResult;
+	
 	import flash.desktop.NativeProcess;
 	import flash.desktop.NativeProcessStartupInfo;
 	import flash.events.Event;
@@ -7,8 +9,11 @@ package com.blueparabola.unitary.favourites
 	import flash.events.NativeProcessExitEvent;
 	import flash.events.ProgressEvent;
 	import flash.filesystem.File;
+	import flash.filesystem.FileMode;
+	import flash.filesystem.FileStream;
 	import flash.system.Capabilities;
 	
+	import mx.collections.ArrayCollection;
 	import mx.controls.Alert;
 
 	[Event(name="favouritesRunComplete", type="flash.events.Event")]
@@ -18,9 +23,13 @@ package com.blueparabola.unitary.favourites
 		
 		protected var _runDate:Date;
 		
+		protected var _testCount:int;
+		
 		protected var _testsSucceeded:int;
 		protected var _testsFailed:int;
 		protected var _testsWarned:int;
+		
+		protected var _executionResults:ArrayCollection;
 		
 		[Bindable]
 		public function get runDate():Date {
@@ -32,12 +41,66 @@ package com.blueparabola.unitary.favourites
 		}
 		
 		[Bindable]
+		public function get testCount():int {
+			return _testCount;
+		}
+		
+		protected function set testCount(value:int):void {
+			_testCount = value;
+		}
+		
+		[Bindable]
 		public function get testsSucceeded():int {
 			return _testsSucceeded;
 		}
 		
 		protected function set testsSucceeded(value:int):void {
 			_testsSucceeded = value;
+		}
+		
+		[Bindable]
+		public function get testsFailed():int {
+			return _testsFailed;
+		}
+		
+		protected function set testsFailed(value:int):void {
+			_testsFailed = value;
+		}
+		
+		[Bindable]
+		public function get testsWarned():int {
+			return _testsWarned;
+		}
+		
+		protected function set testsWarned(value:int):void {
+			_testsWarned = value;
+		}
+		
+		[Bindable]
+		public function get executionResults():ArrayCollection {
+			return _executionResults;
+		}
+		
+		protected function set executionResults(value:ArrayCollection):void {
+			_executionResults = value;
+		}
+		
+		[Bindable]
+		public function get chartData():ArrayCollection {
+			return new ArrayCollection([
+				{
+					label : "Successes",
+					value : this.testsSucceeded
+				},
+				{
+					label : "Failures",
+					value : this.testsFailed
+				}
+			]);
+		}
+		
+		public function set chartData(value:ArrayCollection):void {
+			// Do nothing.
 		}
 		
 		protected var _hadError:Boolean = false;
@@ -98,6 +161,13 @@ package com.blueparabola.unitary.favourites
 			
 			nativeProcessStartupInfo.arguments.push(phpUnitFile.nativePath);
 			
+			// Add a request for a JSON log
+			
+			var jsonLogLocation:File = File.createTempFile();
+			
+			nativeProcessStartupInfo.arguments.push("--log-json");
+			nativeProcessStartupInfo.arguments.push(jsonLogLocation.nativePath);
+			
 			// Add the path to the testing script
 			
 			nativeProcessStartupInfo.arguments.push(testScriptPath);
@@ -122,10 +192,39 @@ package com.blueparabola.unitary.favourites
 			});
 			
 			nativeProcess.addEventListener(NativeProcessExitEvent.EXIT, function(e:NativeProcessExitEvent):void {
-				if (e.exitCode != 0) {
+				if (e.exitCode == 255) {
+					// We do not handle PHP errors (e.g.: compile-time failures)
+					// other than to tell the user.
+					
 					hadError = true;
 					dispatchEvent(new FavouriteRunErrorEvent(phpOutput));
 				} else {
+					var fileStream:FileStream = new FileStream;
+					
+					fileStream.open(jsonLogLocation, FileMode.READ);
+					
+					var resultArray:Array = PHPUnitResult.unitResultsFromJSONString(fileStream.readUTFBytes(fileStream.bytesAvailable));
+					
+					executionResults = new ArrayCollection;
+					
+					for each (var unitResult:PHPUnitResult in resultArray) {
+						if (unitResult.isTest) {
+							testCount += 1;
+						}
+						
+						if (unitResult.isSuccessfulTest) {
+							testsSucceeded += 1;
+						}
+						
+						if (unitResult.isFailedTest) {
+							testsFailed += 1;
+						}
+						
+						//TODO: Warnings?
+						
+						executionResults.addItem(unitResult);
+					}			
+					
 					dispatchEvent(new Event(FavouritesTestRun.FavouritesRunComplete));
 				}
 			})
