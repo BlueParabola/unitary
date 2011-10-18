@@ -110,6 +110,11 @@
 						<mx:PieSeries labelPosition="callout" labelField="label" field="value" />
 					</mx:series>
 				</mx:PieChart>
+				<mx:PieChart width="50%" height="100%" dataProvider="{FavouritesTestRun(runHistory.selectedItem).coverageChartData}">
+					<mx:series>
+						<mx:PieSeries labelPosition="callout" labelField="label" field="value" />
+					</mx:series>
+				</mx:PieChart>
 			</s:HGroup>
 			<s:DataGrid 
 				width="100%" height="100%"

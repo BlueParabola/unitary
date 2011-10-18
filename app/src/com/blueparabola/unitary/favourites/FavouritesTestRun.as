@@ -103,6 +103,47 @@ package com.blueparabola.unitary.favourites
 			// Do nothing.
 		}
 		
+		
+		[Bindable]
+		public function get coverageChartData():ArrayCollection {
+			return new ArrayCollection([
+				{
+					label : "Covered",
+					value : this.linesOfCodeCovered
+				},
+				{
+					label : "Uncovered",
+					value : this.linesOfCodeInProject - this.linesOfCodeCovered
+				}
+			]);
+		}
+		
+		public function set coverageChartData(value:ArrayCollection):void {
+			// Do nothing.
+		}
+		
+		protected var _cloverLog:String;
+		
+		[Bindable]
+		public function set cloverLog(value:String):void {
+			_cloverLog = value;
+			
+			var xml:XML = new XML(_cloverLog);
+			
+			linesOfCodeInProject = xml.project.metrics.@loc
+			linesOfCodeCovered = xml.project.metrics.@ncloc;
+		}
+		
+		public function get cloverLog():String {
+			return _cloverLog;
+		}
+		
+		[Bindable]
+		public var linesOfCodeInProject:int;
+		
+		[Bindable]
+		public var linesOfCodeCovered:int;
+		
 		protected var _hadError:Boolean = false;
 		
 		[Bindable]
@@ -153,6 +194,15 @@ package com.blueparabola.unitary.favourites
 			nativeProcessStartupInfo.executable = executableFile;
 			nativeProcessStartupInfo.arguments = new Vector.<String>;
 			
+			// Set up path to Xdebug on OS X
+			
+			if (Capabilities.os.toLowerCase().indexOf("mac") > -1) {
+				nativeProcessStartupInfo.arguments.push("-d");
+				nativeProcessStartupInfo.arguments.push("zend_extension=" + File.applicationDirectory.resolvePath("com/blueparabola/unitary/phpunit/php/osx/xdebug.so").nativePath);
+			} else if (Capabilities.os.toLowerCase().indexOf("win") > -1) {
+				throw new Error("No Windows support yet.");
+			}
+			
 			// Set up include path to point to our copy of PEAR
 			nativeProcessStartupInfo.arguments.push("-d");
 			nativeProcessStartupInfo.arguments.push("include_path=.:" + phpUnitDirectory.nativePath);
@@ -160,6 +210,13 @@ package com.blueparabola.unitary.favourites
 			// Add the path to PHPUnit's entry point
 			
 			nativeProcessStartupInfo.arguments.push(phpUnitFile.nativePath);
+			
+			// Add a request for a Clover coverage log
+			
+			var coverageLogLocation:File = File.createTempFile();
+			
+			nativeProcessStartupInfo.arguments.push("--coverage-clover");
+			nativeProcessStartupInfo.arguments.push(coverageLogLocation.nativePath);
 			
 			// Add a request for a JSON log
 			
@@ -224,6 +281,10 @@ package com.blueparabola.unitary.favourites
 						
 						executionResults.addItem(unitResult);
 					}			
+					
+					fileStream.open(coverageLogLocation, FileMode.READ);
+					
+					cloverLog = fileStream.readUTFBytes(fileStream.bytesAvailable);
 					
 					dispatchEvent(new Event(FavouritesTestRun.FavouritesRunComplete));
 				}

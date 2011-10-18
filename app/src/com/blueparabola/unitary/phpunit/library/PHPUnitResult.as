@@ -28,7 +28,7 @@ package com.blueparabola.unitary.phpunit.library
 		public var executionTrace:ArrayCollection;
 		
 		[Bindable]
-		public var message:String;
+		public var message:String;		
 		
 		public function get isTest():Boolean {
 			return (status !== null);
