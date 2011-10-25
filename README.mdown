@@ -1,3 +1,46 @@
 # Welcome to Unitary
 
-Unitary is a frontend (currently under development) for PHPUnit built using Adobe Flex/AIR.
+Unitary is a frontend to [PHPUnit](https://github.com/sebastianbergmann/phpunit/) built using Adobe Flex/AIR. It runs on Windows and OS X, and is designed to provide a one-stop environment for executing unit-test runs without having to install any additional software.
+
+Unitary comes with everything needed to run PHPUnit; on Windows, it even comes with its own built-in copy of PHP (don't worry, it won't interfere with any other copy of PHP you may have on your machine).
+
+## Functionality
+
+Unitary has a few tricks up its sleeve:
+
+1. Runs any PHPUnit-powered test suite
+2. Keeps a running log of all your test runs, including code coverage
+3. Visualizes successful and unsuccessful test
+4. Visualizes your test suite's code coverage
+
+In addition, since Unitary is free and open-source software, you can take advantage of the source code, which provides a few additional items:
+
+1. A library that can run PHPUnit against a test suite and collect all the output
+2. A library that interprets and stores the logs produced by PHPUnit
+
+## Using Unitary
+
+1. Download and install Unitary
+2. Launch Unitary
+3. Add a project
+4. Run tests!
+
+Yes—it's meant to be that simple. As long as your tests run properly, Unitary should work without any further configuration or installation steps.
+
+## Creating projects
+
+Creating a project is a fairly easy process:
+
+1. Specify a name for the project
+2. Specify the location of your test suite's entry point
+3. Provide any additional parameters; these are passed directly to the PHP executable when running your suite
+
+# Contributing to Unitary
+
+Unitary is free and open-source software, released under a BSD-style license. You are free to clone the source and do with it whatever you like, so long as you abide by the [various licenses](LICENSE.TXT).
+
+We are happy to take your suggestions, pull requests, and any other ideas. After all, software is only useful when it's used!
+
+## Current status of the project
+
+The project is currently still under development and should be considered “alpha quality.” It runs fairly well, but still has a few quirks and requires some more work. Of course, you're welcome to help us stomp those bugs by contributing a patch!
