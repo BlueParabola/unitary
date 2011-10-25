@@ -181,7 +181,7 @@ package com.blueparabola.unitary.favourites
 				// On a Mac, PHP comes bundled in.
 				executableFile = new File("/usr/bin/php");
 			} else if (Capabilities.os.toLowerCase().indexOf("win") > -1) {
-				throw new Error("No Windows support yet.");
+				executableFile = File.applicationDirectory.resolvePath("com/blueparabola/unitary/phpunit/php/windows/php.exe");
 			} else {
 				throw new Error("Unknown operating system «" + Capabilities.os + "»");
 			}
@@ -200,12 +200,18 @@ package com.blueparabola.unitary.favourites
 				nativeProcessStartupInfo.arguments.push("-d");
 				nativeProcessStartupInfo.arguments.push("zend_extension=" + File.applicationDirectory.resolvePath("com/blueparabola/unitary/phpunit/php/osx/xdebug.so").nativePath);
 			} else if (Capabilities.os.toLowerCase().indexOf("win") > -1) {
-				throw new Error("No Windows support yet.");
+				nativeProcessStartupInfo.arguments.push("-d");
+				nativeProcessStartupInfo.arguments.push("zend_extension=" + File.applicationDirectory.resolvePath("com/blueparabola/unitary/phpunit/php/windows/xdebug.dll").nativePath);
 			}
 			
 			// Set up include path to point to our copy of PEAR
 			nativeProcessStartupInfo.arguments.push("-d");
-			nativeProcessStartupInfo.arguments.push("include_path=.:" + phpUnitDirectory.nativePath);
+			
+			if (Capabilities.os.toLowerCase().indexOf("mac") > -1) {
+				nativeProcessStartupInfo.arguments.push("include_path=.:" + phpUnitDirectory.nativePath);
+			} else if (Capabilities.os.toLowerCase().indexOf("win") > -1) {
+				nativeProcessStartupInfo.arguments.push("include_path=.;" + phpUnitDirectory.nativePath);
+			}
 			
 			// Add the path to PHPUnit's entry point
 			
